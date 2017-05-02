@@ -29,3 +29,9 @@ Execute(ale#path#IsBufferPath should match paths with dots):
   silent file! foo.txt
 
   Assert ale#path#IsBufferPath(bufnr(''), './test/../foo.txt'), 'No match for ./test/../foo.txt'
+
+Execute(ale#path#IsBufferPath should match relative paths containing slashes):
+  silent file! top/foo.txt
+
+  Assert ale#path#IsBufferPath(bufnr(''), 'top/foo.txt'), 'No match for top/foo.txt'
+  Assert !ale#path#IsBufferPath(bufnr(''), 'top/bar.txt'), 'Bad match for top/bar.txt'

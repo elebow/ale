@@ -84,11 +84,14 @@ endfunction
 " Given a buffer number and a relative or absolute path, return 1 if the
 " two paths represent the same file on disk.
 function! ale#path#IsBufferPath(buffer, filename) abort
-    let l:buffer_filename = expand('#' . a:buffer . ':p')
+    let l:buffer_filename = expand('#' . a:buffer)
+    let l:buffer_absolute_filename = expand('#' . a:buffer . ':p')
+
+    let l:buffer_directory = substitute(l:buffer_absolute_filename, l:buffer_filename . '$', '', '')
     let l:resolved_filename = ale#path#GetAbsPath(
-    \   fnamemodify(l:buffer_filename, ':h'),
+    \   l:buffer_directory,
     \   a:filename
     \)
 
-    return resolve(l:buffer_filename) ==# l:resolved_filename
+    return resolve(l:buffer_absolute_filename) ==# l:resolved_filename
 endfunction
